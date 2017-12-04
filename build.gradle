@@ -1,0 +1,68 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+
+  dependencies {
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE')
+    classpath 'com.bmuschko:gradle-docker-plugin:3.2.1'
+  }
+}
+
+plugins {
+  id "io.franzbecker.gradle-lombok" version "1.11"
+}
+
+group = "com.epam"
+version = "0.0.1"
+
+allprojects {
+  apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'io.franzbecker.gradle-lombok'
+
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.SR4"
+    }
+
+  }
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'idea'
+  apply plugin: 'spring-boot'
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  dependencies {
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+  }
+
+  jar {
+    archiveName = project.name + ".jar"
+  }
+
+  task dockerBuild << {
+    exec {
+      commandLine 'docker', 'build', '--force-rm=true', "--tag=${project.name}", '.'
+    }
+  }
+
+  dockerBuild.dependsOn build
+
+  springBoot {
+    executable = true
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.9'
+}

@@ -1,0 +1,8 @@
+rootProject.name = "plan-b"
+
+//## start includes ####
+include 'transactions-service'
+include 'user-service'
+include 'calculate-service'
+include 'discovery-service'
+//## end includes ######

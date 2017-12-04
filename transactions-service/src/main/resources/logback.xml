@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <appender name="InfoFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern" value="log/Statistics/Info_%d{yyyy-MM-dd}.log"/>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <!-- deny all events with a level below INFO, that is TRACE and DEBUG -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>
+                %-4relative [%thread] %-5level %d{"yyyy/MM/dd HH:mm:ss,SSS"} %logger{30} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ErrorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <param name="FileNamePattern" value="log/Statistics/Error_%d{yyyy-MM-dd}.log"/>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <!-- deny all events with a level below ERROR -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>
+                %-4relative [%thread] %-5level %d{"yyyy/MM/dd HH:mm:ss,SSS"} %logger{30} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <appender-ref ref="InfoFileAppender" level="INFO"/>
+        <appender-ref ref="ErrorFileAppender" level="ERROR"/>
+    </root>
+
+</configuration>

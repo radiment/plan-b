@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./gradlew transactions-service:dB
+docker-compose up -d
